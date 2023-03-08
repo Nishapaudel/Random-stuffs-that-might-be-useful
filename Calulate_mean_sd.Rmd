@@ -1,0 +1,60 @@
+---
+title: "Calculate mean and std dev of duplicates"
+author: "Nisha_paudel"
+date: "2023-03-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## read the data
+
+```{r}
+data <- read.csv("/home/nisha/Desktop/pathway_analysis/kegg/GR_matrix_march_5.csv", sep = "\t", row.names = 2)
+ head(data)
+```
+
+```{r}
+ data1 <- read.csv("/home/nisha/Desktop/pathway_analysis/kegg/GR_matrix_march_5.csv", sep = "\t", row.names = 2)
+ 
+```
+
+## Get only numeric value
+
+```{r}
+data1$Best <- NULL
+data1$Gene <- NULL
+
+
+```
+
+##  row means
+
+```{r}
+x_means<- rowMeans(data1)
+head(x_means)
+#cbind(mat, rowSums(mat), rowMeans(mat))
+```
+
+## row std dev
+
+```{r}
+library(matrixStats)
+data1$row_std = rowSds(as.matrix(data1[,c(-1)]))
+
+```
+
+## Bind numeric martix with means and std dev
+
+```{r}
+new_df <- cbind(data, rowSums(data1), rowMeans(data1))
+head(new_df)
+```
+
+## Save new df
+
+```{r}
+write.csv(new_df, file = '/home/nisha/Desktop/pathway_analysis/kegg/GR_matrix_means_std+dev.csv', quote = F, row.names = T)
+```
